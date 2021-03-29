@@ -6,7 +6,7 @@ Python-pptx is a Python library for generating a customized PowerPoint presentat
 The stacked bar chart format is most suitable for the reporting of a 5-point Likert scale in the traditional Top 2 Box, Neutral, Bottom 2 Box format. The table replicates data presented in the table format as-is. 
 
 
-## Usage
+## Example 
 
 Given `data.csv`
 
