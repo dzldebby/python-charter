@@ -10,17 +10,44 @@ import pandas as pd
 import os
 
 
+num_of_charts = 3 
+
 # Create presentation with 1 slide
 prs = Presentation('chart-01.pptx')
 # Select first slide 
 slide = prs.slides[0]
 
-data = pd.read_csv('data.csv')
+data = pd.read_csv('data.csv', index_col=None)
+
+df = {}
+title = {}
+
+# get data
+
+for i in range(0,3):
+    df[str(i)] = data[i*7:4+(7)*i]
+    df[str(i)].columns = range(df[str(i)].shape[1])
+    df[str(i)].reset_index(drop=True, inplace=True)
+    df[str(i)].columns = [df[str(i)].iloc[0][0], df[str(i)].iloc[0][1], df[str(i)].iloc[0][2], df[str(i)].iloc[0][3]]
+    df[str(i)] = df[str(i)].drop(0, axis = 0)
+
+# get first title
+
+title["0"] = data.columns[0]
+
+# get remainding titles 
+
+for i in range(1,2):
+    print(i)
+    title[str(i)] = data.iloc[i+5][0]
+
 
 # TABLE ----------------------------------
 
-def create_table():
-    # Create table object     
+def create_table(data):
+    # Create table objec 
+
+    # 2nd placeholder     
     table_placeholder = slide.shapes[0]
     shape = table_placeholder.insert_table(rows=data.shape[0]+1, cols=data.shape[1])
     table = shape.table
@@ -29,7 +56,6 @@ def create_table():
 
     for col in range(0, data.shape[1]):
         table.cell(0,col).text = str(data.columns[col])
-
 
     # Populate table data (except first column with the scale)
     for col in range(1,data.shape[1]):
@@ -47,7 +73,7 @@ def create_table():
 
 # STACKED BAR CHART --------------------
 
-def create_stackedbar():
+def create_stackedbar(data):
     # Define chart data
     chart_data = CategoryChartData()
 
@@ -105,9 +131,28 @@ def open_ppt():
     # Open ppt
     PptApp = win32com.client.Dispatch("Powerpoint.Application")
     PptApp.Visible = True
-    PptApp.Presentations.Open(r'C:\YOUR_FILE_DIRECTORY\chart-01.pptx')
+    PptApp.Presentations.Open(r'C:\Users\Debby\python-chart\chart-01.pptx')
 
-create_table()
-create_stackedbar()
+
+
+def add_title(title):
+    for shape in slide.shapes:
+        if not shape.has_text_frame:
+            continue
+        else:
+            text_frame = shape.text_frame
+            text_frame.clear()
+            p = text_frame.paragraphs[0]
+            run = p.add_run()
+            run.text = title
+
+
+create_table(df["1"])
+create_stackedbar(df["1"])
+add_title(title["1"])
 save_ppt()
 open_ppt()
+
+
+
+
