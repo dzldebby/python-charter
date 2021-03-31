@@ -11,6 +11,7 @@ The stacked bar chart format is most suitable for the reporting of a 5-point Lik
 Given `data.csv`
 
 ```
+This is your auto-generated slide,,,
 Scale,X,Y,Z
 T2B,20,20,50
 Neutral,10,20,5
@@ -19,6 +20,33 @@ B2B,70,60,45
 
 Generate slide as below:
 ![alt text](images/beforeafter.png?raw=True "Powerpoint format.")
+
+### Generating multiple slides with one csv file 
+
+It is possible to generate multiple slides (each with its own stacked bar chart and table), with just a single csv file as input. 
+
+To do this, you will need to: 
+
+#### Separate your data that you want on each slide with 2 rows  
+
+```
+This is your auto-generated slide,,,
+Scale,X,Y,Z
+T2B,20,20,50
+Neutral,10,20,5
+B2B,70,60,45
+,,,
+,,,
+2nd auto-generated slide,,,
+Scale,A,B,C
+T2B,20,20,20
+Neutral,20,20,20
+B2B,60,60,60
+,,,
+,,,
+```
+
+
 
 ## Usage 
 

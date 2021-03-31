@@ -9,13 +9,12 @@ import win32com.client
 import pandas as pd
 import os
 
-
-num_of_charts = 3 
+# Fill in number of charts / slides you want to chart 
+num_of_charts = 3
 
 # Create presentation with 1 slide
 prs = Presentation('chart-01.pptx')
 # Select first slide 
-slide = prs.slides[0]
 
 data = pd.read_csv('data.csv', index_col=None)
 
@@ -24,22 +23,25 @@ title = {}
 
 # get data
 
-for i in range(0,3):
+col = []
+
+for i in range(0,num_of_charts):
     df[str(i)] = data[i*7:4+(7)*i]
     df[str(i)].columns = range(df[str(i)].shape[1])
     df[str(i)].reset_index(drop=True, inplace=True)
-    df[str(i)].columns = [df[str(i)].iloc[0][0], df[str(i)].iloc[0][1], df[str(i)].iloc[0][2], df[str(i)].iloc[0][3]]
+    df[str(i)].columns = [df[str(i)].iloc[0][x] for x in range(0, len(data.columns))]
+    # df[str(i)].columns = [df[str(i)].iloc[0][0], df[str(i)].iloc[0][1], df[str(i)].iloc[0][2], df[str(i)].iloc[0][3]]
     df[str(i)] = df[str(i)].drop(0, axis = 0)
 
 # get first title
 
 title["0"] = data.columns[0]
 
+
 # get remainding titles 
 
-for i in range(1,2):
-    print(i)
-    title[str(i)] = data.iloc[i+5][0]
+for i in range(1,num_of_charts):
+    title[str(i)] = data.iloc[i*6 + i -1][0]
 
 
 # TABLE ----------------------------------
@@ -147,11 +149,25 @@ def add_title(title):
             run.text = title
 
 
-create_table(df["1"])
-create_stackedbar(df["1"])
-add_title(title["1"])
-save_ppt()
+
+# slide = prs.slides[0]
+
+for i in range(0,num_of_charts):
+    slide = prs.slides.add_slide(prs.slide_layouts[0])
+    slide = prs.slides[i]
+    create_table(df[str(i)])
+    create_stackedbar(df[str(i)])
+    add_title(title[str(i)])
+    save_ppt()
+
 open_ppt()
+print("Charted!")
+
+# create_table(df["0"])
+# create_stackedbar(df["1"])
+# add_title(title["1"])
+# save_ppt()
+# open_ppt()
 
 
 
